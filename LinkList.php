@@ -30,27 +30,30 @@ class LinkList {
 		return $this->head;
 	}
 
-	public function addNodeToTail($val) {
-		
-		$newNode = new ListNode($val);
+	// 尾插法构造单链表
+	public function createLinkList($arr) {
 
-		$curNode = $this->head;
+		$virthead = new ListNode(0);
 
-		if ($curNode == null) { // 如果头节点为null，头节点直接指向新节点即可
+		$curNode = $virthead;
 
-			$curNode->next = $newNode;
+		foreach ($arr as $value) {
+			$newNode = new ListNode($value);
+			// 如果头节点为null，头节点直接指向新节点即可
+			if ($curNode == null) {
+				$curNode->next = $newNode;
+			} else {
+				// 否则，遍历找到最后一个节点，然后让最后一个节点指向新节点即可
+				while ($curNode->next != null) {
+					$curNode = $curNode->next;
+				}
 
-		} else {
-			// 否则，遍历找到最后一个节点，然后让最后一个节点指向新节点即可
-			while ($curNode->next != null) {
-
-				$curNode = $curNode->next;
+				$curNode->next = $newNode;
 			}
-
-			$curNode->next = $newNode;
+			
 		}
 
-		return $this->head;
+		return $virthead->next;
 	}
 
 	public function printList() {
@@ -130,8 +133,8 @@ class LinkList {
 	}
 
 
-	// 遍历的过程中，记录保留上一个节点，这样在删除的时候，就不用重新再找相关的前驱节点了。
-	// 节点是可以记录下来的，多运用这样的思路
+	/*遍历的过程中，记录保留上一个节点，这样在删除的时候，就不用重新再找相关的前驱节点了。
+	节点是可以记录下来的，多运用这样的思路*/
 	public function deleteNode($deleteValue)
 	{
 		$preNode = null;
@@ -156,10 +159,7 @@ class LinkList {
 
 	}
 
-	/** 当用一个指针无法解决问题时，可以想想多用几个指针。
-		比如：快慢指针，key步指针等
-		获取链表中倒数第k个节点
-	**/
+	/*当用一个指针无法解决问题时，可以想想多用几个指针。比如：快慢指针，key步指针等，获取链表中倒数第k个节点*/
 	public function getKthFromEnd($k) {
 		// 边界情况处理，从而提高代码的健壮性
 		if ($this->head == null || $k == 0) {
@@ -186,7 +186,7 @@ class LinkList {
 		$this->head = $behindNode;
 	}
 
-	public function printListByNode($head) {
+	public function printListByHead($head) {
 		
 		if ($head == null) {
 			return null;
@@ -205,9 +205,9 @@ class LinkList {
 		echo PHP_EOL;
 	}
 
-		// 利用归并的思想，注意特殊边界情况处理
-	public function mergeTwoList(ListNode $head1 = null, ListNode $head2 = null) {
-
+	// 利用归并的思想，注意特殊边界情况处理
+	public function mergeTwoList($head1,$head2) 
+	{
 		if ($head1 == null) {
 			return $head2;
 		} 
@@ -216,38 +216,36 @@ class LinkList {
 			return $head1;
 		}
 
-		$head = new ListNode();
-		$curNode1 = $head1;
-		$curNode2 = $head2;
+		$virhead = new ListNode(0);
 
-		$newListHead = $head;
+		$newListHead = $virhead;
 
-		while ($curNode1 != null && $curNode2 != null) {
+		while ($head1 != null && $head2 != null) {
 
-			if ($curNode1->val < $curNode2->val) {
-				$newListHead->next = $curNode1;
-				$curNode1 = $curNode1->next;
+			if ($head1->val < $head2->val) {
+				$newListHead->next = $head1;
+				$head1 = $head1->next;
 			} else {
-				$newListHead->next = $curNode2;
-				$curNode2 = $curNode2->next;
+				$newListHead->next = $head2;
+				$head2 = $head2->next;
 			}
 
 			$newListHead = $newListHead->next;
 		}
 
-		if ($curNode1 != null) {
-			$newListHead->next = $curNode1;
+		if ($head1 != null) {
+			$newListHead->next = $head1;
 		}
 
-		if ($curNode2 != null) {
-			$newListHead->next = $curNode2;
+		if ($head2 != null) {
+			$newListHead->next = $head2;
 		}
 
-		return $head;
+		return $virhead->next;
 	}
 
 	// 递归实现方式：合并两个有序链表
-	public function mergeListRecur(ListNode $head1 = null, ListNode $head2 = null) 
+	public function mergeListRecur($head1,$head2) 
 	{
 		if ($head1 == null) {
 			return $head2;
@@ -257,8 +255,7 @@ class LinkList {
 			return $head1;
 		}
 
-		$mergedHead = new ListNode();
-		// $mergedHead = null;
+		$mergedHead = null;
 
 		if ($head1->val < $head2->val) {
 			$mergedHead = $head1;
@@ -271,21 +268,15 @@ class LinkList {
 		return $mergedHead;
 	}
 
-	/*
-	判断链表中是否存在环，如果在存在，则返回环中的一个节点。
-	使用快慢指针：如果慢指针追上了快指针，则证明链表中存在环；否则，不存在环。
+	/*判断链表中是否存在环，如果在存在，则返回环中的一个节点。使用快慢指针：如果慢指针追上了快指针，则证明链表中存在环；否则，不存在环。
 	*/
 	public function meetingNode($head)
 	{
-		if ($head == null) {
+		if ($head == null || $head->next == null) {
 			return null;
 		}
 
 		$slow = $head->next;
-		if ($slow == null) {
-			return null;
-		}
-
 		$fast = $slow->next;
 
 		while ($fast != null && $slow != null) {
@@ -299,6 +290,7 @@ class LinkList {
 				$fast = $fast->next;
 			}
 		}
+		
 		return null;
 	}
 
@@ -501,37 +493,72 @@ class LinkList {
 		return $prev;
 	}
 
+	/*
+	可以使用两个指针：一个快指针，一个慢指针。
+	第一个指针从列表的开头向前移动n+1步，而第二个指针将从列表的开头出发。现在，这两个指针被 n个结点分开。我们通过同时移动两个指针向前来保持这个恒定的间隔，直到第一个指针到达最后一个结点。此时第二个指针将指向从最后一个结点数起的第n个结点。我们重新链接第二个指针所引用的结点的 next 指针指向该结点的下下个结点。
+	*/
+	public function removeNthFromEnd($head,$n)
+	{
+		if ($head == null || $n == 0) {
+			return false;
+		}
+
+		$virtHead = new ListNode(0);
+		$virtHead->next = $head;
+
+		$slow = $virtHead;
+		$fast = $virtHead;
+
+		// 快指针先走n+1步，即n个节点
+		for ($i = 0; $i <= $n; $i++) {
+			// 注意这里的条件是fast,而不是fast->next
+			if ($fast != null) {
+				$fast = $fast->next;
+			} else {
+				return false;
+			}
+		}
+
+		// 注意这里的条件是fast,而不是fast->next
+		while ($fast != null) {
+			$slow = $slow->next;
+			$fast = $fast->next;
+		}
+
+		$slow->next = $slow->next->next;
+
+		return $virtHead->next;
+	}
+
+	// 分割链表
+	public function partionList($head,$x)
+	{
+		$virtHead1 = new ListNode(0);
+		$virtHead2 = new ListNode(0);
+
+		$minList = $virtHead1;
+		$maxList = $virtHead2;
+
+		$curr = $head;
+		while ($curr != null) {
+			if ($curr->val < $x) {
+				$minList->next = $curr;
+				$minList = $minList->next;
+			} else {
+				$maxList->next = $curr;
+				$maxList = $maxList->next;
+			}
+			$curr = $curr->next;
+		}
+
+		$minList->next = $virtHead2->next;
+		$maxList->next = null; // 注意链表要结尾，结束。
+
+		return $virtHead1->next;
+	}
+
 
 }
-
-$obj1 = new LinkList();
-$obj1->addNodeToTail(2);
-$obj1->addNodeToTail(3);
-$obj1->addNodeToTail(4);
-$head1 = $obj1->addNodeToTail(5);
-// $head1 = $obj1->addNodeToTail(6);
-// $obj1->addNodeToTail(7);
-// $head1 = $obj1->addNodeToTail(8);
-
-$obj1->printListByNode($head1);
-
-$head2 = $obj1->reverseKGroup($head1,2);
-
-$obj1->printListByNode($head2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

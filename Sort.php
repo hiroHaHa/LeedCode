@@ -2,9 +2,9 @@
 
 /**
 	排序算法类，主要排序算法：
-	冒泡、插入、选择
-	归并、快排
-	桶、计数、基数，此类排序对数据都有特别的要求，要根据实际情况进行选择使用。
+	冒泡、插入、选择，时间复杂度：O(n2)
+	归并、快排，时间复杂度：O(nlogn)
+	桶、计数、基数，时间复杂度：O(n)此类排序对数据都有特别的要求，要根据实际情况进行选择使用。
 */
 class Sort {
 
@@ -227,7 +227,7 @@ class Sort {
 	}
 
 	/** 时间复杂度：O(n) **/
-	public function BucketSort(array $arr)
+	public function bucketSort(array $arr)
 	{
 		$min = min($arr);
 		$max = max($arr);
@@ -255,7 +255,7 @@ class Sort {
 	}
 
 	/* 当桶内存在多个数据时进行的排序*/
-	public function BucketSortWithMultiDataInBucket(array $arr)
+	public function bucketMultiSort(array $arr)
 	{
 		$min = min($arr);
 		$max = max($arr);
@@ -290,7 +290,7 @@ class Sort {
 
 	
 	/* 是桶排序的特殊情况，特殊在，桶内的数据不用排序*/
-	public function CountingSort(array $arr)
+	public function countingSort(array $arr)
 	{
 		$arrCount = [];
 		$max = max($arr);
@@ -318,7 +318,7 @@ class Sort {
 	}
 
 	/* 基数排序:有点鸡肋*/
-	public function RadixSort(array &$arr) 
+	public function radixSort(array &$arr) 
 	{
 		if (count($arr) <= 1) {
 			return $arr;
@@ -351,13 +351,6 @@ class Sort {
 	}
 
 }
-
-$obj = new Sort();
-$arr = [640, 34, 25, 12, 22, 11, 90];
-
-$ret = $obj->mergeSort($arr);
-print_r(json_encode($ret));
-
 
 
 

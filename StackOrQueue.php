@@ -297,12 +297,7 @@ class StackPushPopValid
 		return $isPopOrder;
 	}
 
-	/**
-     * @param Integer[] $pushed
-     * @param Integer[] $popped
-     * @return Boolean
-     */
-    function validateStackSequences($pushed, $poped) {
+    public function validateStackSequences($pushed, $poped) {
         $stack = [];
         $j = 0;
 

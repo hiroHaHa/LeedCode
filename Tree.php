@@ -91,6 +91,7 @@ class Tree
 		echo $root->val . ' ';
 	}
 
+	// 验证子树
 	public function isSubTree($root1,$root2)
 	{
 		$ret = false;
@@ -160,6 +161,7 @@ class Tree
 
 	}
 
+	// 层序遍历打印二叉树
 	public function printFromTopToBottom($root)
 	{
 		if ($root == null) {
@@ -311,23 +313,6 @@ class Tree
 	}
 
 }
-
-$obj = new Tree();
-
-$arr1 = [1,2,3,4,5,6,8,9,10];
-$root1 = $obj->createTree($arr1);
-
-$obj->preOrderTree($root1);
-echo PHP_EOL;
-$obj->inOrderTree($root1);
-echo PHP_EOL;
-
-$ret = $obj->isBalanced($root1);
-var_dump($ret);
-
-$ret2 = $obj->balanceTree($root1);
-var_dump($ret2);
-
 
 
 
